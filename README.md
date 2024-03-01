@@ -13,3 +13,13 @@ Original firmware: https://github.com/spezifisch/T12PenSolder
 
 ## What's next?
 * Auto standby when no movement. (Is there motion sensor / accelerometer on this soldering iron?)
+
+## Pictures
+* Splash screen
+![Splash screen](./Splashscreen.jpg)
+
+* Main display
+![Main display](./Maindisplay.jpg)
+
+* Off display
+![Off display](./Offdisplay.jpg)
