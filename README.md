@@ -1,5 +1,6 @@
 Original firmware: https://github.com/spezifisch/T12PenSolder
 
+# Firmware for cheap T12 Pen Solder - v7 Board
 
 ## Changes:
 * Updated offset to align the screen display (for v7 board)
