@@ -19,7 +19,7 @@ Original firmware: https://github.com/spezifisch/T12PenSolder
 ![Splash screen](./Splashscreen.jpg)
 
 * Main display
-![Main display](./Maindisplay.jpg)
+![Main display](./MainDisplay.jpg)
 
 * Off display
-![Off display](./Offdisplay.jpg)
+![Off display](./OffDisplay.jpg)
