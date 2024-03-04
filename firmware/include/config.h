@@ -34,10 +34,16 @@ static constexpr uint16_t TIPHEAT_PIN_MASK = GPIO_PIN_3;
 // adc inputs
 static constexpr int VIN_MEAS = PA1;
 static constexpr int TIPTEMP_MEAS = PA2;
+// motion detector
+static constexpr int motionDetectorPin = PA0;
+
 
 // default settings
-static constexpr uint32_t DEFAULT_TEMPERATURE_degC = 320;
-static constexpr uint32_t DEFAULT_STANDBY_TIME_ms = 60000;
+static constexpr uint32_t DEFAULT_TEMPERATURE_degC = 300;
+static constexpr uint32_t DEFAULT_TEMPERATURE_STANDBY_degC = 150;
+static constexpr uint32_t DEFAULT_STANDBY_TIME_ms = 30000;
+static constexpr uint32_t DEFAULT_OFF_TIME_ms = 300000;
+static constexpr uint32_t DEBOUNCE_INTERVAL_ms = 1000;
 
 // NOTE there are also some soldering tip related constants in ./solderingtip.h
 
