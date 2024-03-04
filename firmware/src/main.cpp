@@ -32,6 +32,9 @@ bool longPressDetected = false; // Flag to indicate a long press
 bool inStandby;
 int32_t tt_missing_prev = 1; // init as tip missing
 int32_t tt_missing = 1;
+// Variable to store motion detection state
+volatile bool motionDetected = false;
+volatile unsigned long lastMotionTime = 0;
 
 #define Untitled_width 128
 #define Untitled_height 32
@@ -80,6 +83,12 @@ static unsigned char Untitled_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x3f, 0x00, 0xfe, 0x03, 0x00, 0x00,
    0x00, 0x0c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
+void motionInterrupt() {
+    motionDetected = digitalRead(motionDetectorPin) == HIGH;
+    lastMotionTime = millis();
+    motionDetected = true;
+}
+
 void setup()
 {
     // lowlevel stm32cube setup
@@ -101,6 +110,9 @@ void setup()
     analogReadResolution(12);
     // set sampling time to same as stock firmware
     MX_ADC_Config();
+    // motion detector setup
+    pinMode(motionDetectorPin, INPUT);
+    attachInterrupt(digitalPinToInterrupt(motionDetectorPin), motionInterrupt, CHANGE);
 
     // PWM setup
     solderingTip.setup();
@@ -200,6 +212,7 @@ void loop(void)
         delay(2000);
     }
 
+/* Removed - using auto to switch Active - Standby
     if (buttonSet)
     {
         if (!heatOn) {
@@ -212,6 +225,7 @@ void loop(void)
             solderingTip.setTargetTemperature(DEFAULT_TEMPERATURE_STANDBY_degC);
         }
     }
+*/
 
     if (buttonMinus)
     {
@@ -241,10 +255,17 @@ void loop(void)
         buttonPlusDebounce.reset(); // repeat
     }
 
-    // reset idle time on any button press
-    if (buttonSet || buttonMinus || buttonPlus)
+    // reset idle time & active on any button press / motion detected
+    if (buttonSet || buttonMinus || buttonPlus || motionDetected)
     {
         idle_time_ms = 0;
+        heatOn = true;
+        solderingTip.setTargetTemperature(selectedTemperature_degC);
+    }
+
+    // motion detector : only indicate no motion after 3s idle
+    if (motionDetected && millis() - lastMotionTime > 3000) {
+        motionDetected = false;
     }
 
     // get tip state
@@ -318,7 +339,7 @@ void loop(void)
         {            
             u8g2.print("No Tip");
         }
-    
+
         // idle timer
         u8g2.setCursor(101, 13); 
         snprintf(tmp, sizeof(tmp), "%2ds", standby_counter_s);              
